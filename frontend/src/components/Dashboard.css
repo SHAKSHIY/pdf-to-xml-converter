@@ -1,0 +1,13 @@
+/* src/components/Dashboard.css */
+.dashboard-container {
+    font-family: Arial, sans-serif;
+  }
+  
+  .sidebar h3 {
+    margin-top: 0;
+  }
+  
+  .sidebar ul li:hover {
+    background-color: #f0f0f0;
+  }
+  

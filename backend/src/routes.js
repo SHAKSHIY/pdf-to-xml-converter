@@ -10,14 +10,10 @@ const Conversion = require("./models/Conversion");
 require("dotenv").config();
 
 const router = express.Router();
-
-// Setup multer for file uploads (in-memory storage)
 const upload = multer({ storage: multer.memoryStorage() });
 
 /**
  * User Registration
- * POST /api/register
- * Body: { email, password }
  */
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
@@ -37,8 +33,6 @@ router.post("/register", async (req, res) => {
 
 /**
  * User Login
- * POST /api/login
- * Body: { email, password }
  */
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -49,7 +43,6 @@ router.post("/login", async (req, res) => {
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) return res.status(400).json({ error: "Invalid credentials" });
     
-    // Create JWT payload containing user's ID and email
     const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.json({ token });
   } catch (error) {
@@ -59,32 +52,48 @@ router.post("/login", async (req, res) => {
 });
 
 /**
- * PDF Upload and Conversion
- * POST /api/upload
- * Header: Authorization: Bearer <token>
- * Form-data: file (the PDF file)
+ * Get User Profile
+ * GET /api/profile
+ */
+router.get("/profile", authenticateJWT, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("email _id");
+    res.json(user);
+  } catch (error) {
+    console.error("Profile error:", error);
+    res.status(500).json({ error: "Failed to fetch profile" });
+  }
+});
+
+/**
+ * PDF Upload and Conversion (Improved)
  */
 router.post("/upload", authenticateJWT, upload.single("file"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   try {
-    // Parse PDF using pdf-parse
     const data = await pdfParse(req.file.buffer);
-    // Split text by form feed (\f) to separate pages
-    const pages = data.text.split("\f");
+    const originalText = data.text; // Save original text for preview
+    const pages = data.text.split("\f"); // Split pages by form feed
     let xml = `<document>`;
     pages.forEach((page, index) => {
-      xml += `<page number="${index + 1}"><![CDATA[${page.trim()}]]></page>`;
+      // Further split page into paragraphs by double newlines
+      const paragraphs = page.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+      xml += `<page number="${index + 1}">`;
+      paragraphs.forEach(paragraph => {
+        xml += `<paragraph><![CDATA[${paragraph.trim()}]]></paragraph>`;
+      });
+      xml += `</page>`;
     });
     xml += `</document>`;
 
-    // Save conversion result in the database linked to the user (optional)
     const conversion = new Conversion({
       xmlResult: xml,
+      originalText,
       user: req.user.userId
     });
     await conversion.save();
 
-    res.json({ xml, conversionId: conversion._id });
+    res.json({ xml, originalText, conversionId: conversion._id });
   } catch (error) {
     console.error("PDF conversion error:", error);
     res.status(500).json({ error: "PDF conversion failed" });
@@ -92,9 +101,8 @@ router.post("/upload", authenticateJWT, upload.single("file"), async (req, res) 
 });
 
 /**
- * (Optional) Conversion History Route
+ * Get Conversion History
  * GET /api/history
- * Header: Authorization: Bearer <token>
  */
 router.get("/history", authenticateJWT, async (req, res) => {
   try {
