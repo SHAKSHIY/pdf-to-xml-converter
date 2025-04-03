@@ -50,23 +50,28 @@ pdf-parse & xmlbuilder for PDF processing
 - cd pdf-to-xml-converter
 
 2️⃣ Install Dependencies
+
 Backend:
 - cd backend
 - npm install
+- 
 Frontend:
 - cd frontend
 - npm install
 
 3️⃣ Configure Environment Variables
+
 Create a .env file in the backend folder and add:
 - PORT=5000
 - MONGO_URI=mongodb+srv://your_mongodb_url
 - JWT_SECRET=your_secret_key
 
 4️⃣ Run the Application
+
 Start Backend
 - cd backend
 - npm start
+
 Start Frontend
 - cd frontend
 - npm start
@@ -112,3 +117,11 @@ Real-time progress tracking with WebSocket
 Multi-page document structure preservation
 
 Responsive and mobile-friendly UI
+
+## Future Enhancements
+- ✅ Drag-and-drop PDF upload
+- ✅ AI-based PDF parsing for better structure retention
+- ✅ Dark mode for UI
+
+## Conclusion
+This PDF-to-XML Converter is a robust and user-friendly tool designed to preserve document structure while providing an efficient file conversion system.
