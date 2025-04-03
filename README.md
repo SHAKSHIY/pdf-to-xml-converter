@@ -2,7 +2,8 @@
 
 ## Overview
 
-This project is a full-stack PDF-to-XML converter that allows users to upload PDF files, convert them into structured XML, and manage their conversion history. It features user authentication, real-time conversion status, an interactive file viewer, and advanced filtering/search options.
+This project is a full-stack PDF-to-XML converter that allows users to upload PDFs, convert them into structured XML, and manage their conversion history.
+It includes real-time progress updates, advanced PDF parsing, an interactive file viewer, and user authentication with JWT.
 
 ## Features
 
@@ -22,26 +23,17 @@ This project is a full-stack PDF-to-XML converter that allows users to upload PD
 - ✅ Responsive UI (Optimized for desktop and mobile)
 - ✅ Copy and Download Converted XML
 
-## Tech Stack
-Frontend:
-React.js (with hooks and context API)
-
-Tailwind CSS for UI styling
-
-React Router for navigation
-
-WebSocket for real-time updates
-
-Backend:
-Node.js with Express.js
-
-MongoDB + Mongoose for database
-
-JWT for authentication
-
-WebSocket for live conversion status
-
-pdf-parse & xmlbuilder for PDF processing
+## Technology Choices and Reasoning
+| **Technology**        | **Reason for Choice**                          |
+|----------------------|--------------------------------------|
+| **Frontend:** React.js | Provides a fast, modular, and interactive UI |
+| Tailwind CSS        | Ensures a clean and responsive design |
+| React Router       | Enables seamless navigation between pages |
+| WebSocket         | Real-time status updates for better UX |
+| **Backend:** Node.js + Express.js | Scalable and efficient server-side framework |
+| MongoDB + Mongoose | Flexible NoSQL database to store user data and history |
+| JWT Authentication | Secure user authentication and authorization |
+| pdf-parse & xmlbuilder | Handles PDF extraction and structured XML conversion |
 
 ## Setup and Installation
 
@@ -118,10 +110,55 @@ Multi-page document structure preservation
 
 Responsive and mobile-friendly UI
 
+## Approach to PDF-to-XML Conversion
+
+1. PDF Extraction:
+
+- Uses pdf-parse to extract text from uploaded PDFs.
+
+- Splits PDF into pages and paragraphs for structured processing.
+
+2. XML Conversion:
+
+- Converts extracted text into XML format using xmlbuilder.
+
+- Maintains headers, lists, tables, and paragraph structures.
+
+3. Real-Time Progress Updates:
+
+- Implements WebSocket for live status tracking.
+
+- Users see a progress bar and conversion updates in real time.
+
+4. Interactive Multi-Page Viewer:
+
+- Enables viewing both original PDF and converted XML side by side.
+
+- Supports multi-page documents with navigation between pages.
+
+## Assumptions & Limitations
+
+✔️ Assumptions:
+
+- Users upload well-structured PDFs (with proper text formatting).
+
+- PDF-to-XML conversion is not 100% perfect but maintains most structures.
+
+⚠️ Limitations:
+
+- Complex PDFs with heavy graphics may lose formatting.
+
+- Handwritten or scanned PDFs are not supported (OCR can be added later).
+
+- Large PDFs (100+ pages) might take longer to process.
+
 ## Future Enhancements
-- ✅ Drag-and-drop PDF upload
-- ✅ AI-based PDF parsing for better structure retention
-- ✅ Dark mode for UI
+- Drag-and-drop PDF upload
+- AI-based PDF parsing for better structure retention
+- Support for more document formats (e.g., DOCX, TXT)
+- Dark mode for improved UI accessibility
+- Export XML to other formats (CSV, JSON, etc.)
 
 ## Conclusion
-This PDF-to-XML Converter is a robust and user-friendly tool designed to preserve document structure while providing an efficient file conversion system.
+This PDF-to-XML Converter is a robust, user-friendly, and efficient tool that allows users to convert PDFs while maintaining the document structure.
+With real-time updates, structured XML output, and an interactive UI, this project ensures a seamless user experience. 
