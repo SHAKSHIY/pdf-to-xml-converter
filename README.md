@@ -2,85 +2,94 @@
 
 ## Overview
 
-This project is a web-based application that allows users to upload PDF files and convert them into structured XML format while preserving the document's structure and content.
+This project is a full-stack PDF-to-XML converter that allows users to upload PDF files, convert them into structured XML, and manage their conversion history. It features user authentication, real-time conversion status, an interactive file viewer, and advanced filtering/search options.
 
 ## Features
 
-User authentication (login/register functionality)
-
-File upload for PDF documents
-
-Conversion of PDF content into XML format
-
-Storage of conversion history
-
-Option to copy or download the XML file
-
-Responsive UI built with React
+✅ User Authentication (Login/Register with JWT)
+✅ PDF Upload and Conversion to XML
+✅ Real-time Conversion Progress Updates via WebSocket
+✅ Advanced PDF Parsing (Retains tables, lists, paragraphs, and headers)
+✅ Multi-Page PDF Support (Processes PDFs with multiple pages)
+✅ XML Output That Mirrors PDF Structure and Formatting
+✅ Interactive Multi-Page Viewer for Both PDFs and XML
+✅ Original PDF and XML Side-by-Side Preview
+✅ Conversion History Management (Stored in MongoDB)
+✅ Search and Filter in Conversion History
+✅ Sidebar Navigation for Quick Access to Previous Conversions
+✅ Basic and Comprehensive Error Handling (Including edge cases)
+✅ User Profile Management
+✅ Responsive UI (Optimized for desktop and mobile)
+✅ Copy and Download Converted XML
 
 ## Tech Stack
+Frontend:
+React.js (with hooks and context API)
 
-Frontend: React, Axios, Tailwind CSS
+Tailwind CSS for UI styling
 
-Backend: Node.js, Express.js, Multer, pdf-parse
+React Router for navigation
 
-Database: MongoDB (Mongoose ORM)
+WebSocket for real-time updates
 
-Authentication: JSON Web Token (JWT)
+Backend:
+Node.js with Express.js
 
-## Installation & Setup
+MongoDB + Mongoose for database
 
-Prerequisites
+JWT for authentication
 
-Node.js and npm installed
+WebSocket for live conversion status
 
-MongoDB running locally or through a cloud provider (MongoDB Atlas)
+pdf-parse & xmlbuilder for PDF processing
 
-## Backend Setup
+## Setup and Installation
 
-Navigate to the backend directory:
+1️⃣ Clone the Repository
+git clone https://github.com/yourusername/pdf-to-xml-converter.git
+cd pdf-to-xml-converter
 
+2️⃣ Install Dependencies
+Backend:
 cd backend
-
-Install dependencies:
-
 npm install
-
-Create a .env file and add:
-
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-PORT=5000
-
-Start the backend server:
-
-npm start
-
-## Frontend Setup
-
-Navigate to the frontend directory:
-
+Frontend:
 cd frontend
-
-Install dependencies:
-
 npm install
 
-Start the frontend server:
+3️⃣ Configure Environment Variables
+Create a .env file in the backend folder and add:
+PORT=5000
+MONGO_URI=mongodb+srv://your_mongodb_url
+JWT_SECRET=your_secret_key
 
+4️⃣ Run the Application
+Start Backend
+cd backend
 npm start
+Start Frontend
+cd frontend
+npm start
+
+5️⃣ Access the Application
+Go to http://localhost:3000 in your browser.
 
 ## Usage
-
 Sign up or log in to the application.
 
 Upload a PDF file using the file uploader.
 
 Click "Convert PDF" to process the document.
 
+Monitor real-time progress updates during conversion.
+
 View the XML output, copy it, or download it as a file.
 
-Access past conversions from the history section.
+Access past conversions from the history section with search and filter options.
+
+Preview both the original PDF and the converted XML side by side.
+
+Manage your profile details from the user dashboard.
 
 # API Endpoints
 
@@ -90,8 +99,16 @@ POST /api/auth/register - Register a new user
 
 POST /api/auth/login - Authenticate and receive a JWT token
 
-## File Upload & Conversion
+## PDF Conversion
+POST /api/convert → Convert PDF to XML
 
-POST /api/upload - Upload a PDF and convert it to XML
+GET /api/history → Fetch conversion history
 
-GET /api/history - Fetch conversion history
+GET /api/profile → Get user profile
+
+## Advanced Features
+Real-time progress tracking with WebSocket
+
+Multi-page document structure preservation
+
+Responsive and mobile-friendly UI
