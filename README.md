@@ -46,7 +46,7 @@ It includes real-time progress updates, advanced PDF parsing, an interactive fil
 Backend:
 - cd backend
 - npm install
-- 
+
 Frontend:
 - cd frontend
 - npm install
@@ -70,6 +70,25 @@ Start Frontend
 
 5️⃣ Access the Application
 - Go to http://localhost:3000 in your browser.
+
+## Challenge Level I Implemented?
+This project has been developed up to Level 3 (Advanced Implementation), which includes:
+
+- Advanced PDF parsing to retain tables, lists, paragraphs, and headers
+
+- Multi-page support for handling structured documents
+
+- XML output that mirrors PDF structure and formatting
+
+- Interactive multi-page viewer for both PDF and XML
+
+- Real-time conversion status updates with WebSockets
+
+- Advanced search & filtering in conversion history
+
+- Comprehensive error handling and edge-case management
+
+- Fully responsive design optimized for both desktop and mobile
 
 ## Usage
 - Sign up or log in to the application.
