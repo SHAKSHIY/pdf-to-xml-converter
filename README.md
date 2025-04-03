@@ -38,7 +38,7 @@ It includes real-time progress updates, advanced PDF parsing, an interactive fil
 ## Setup and Installation
 
 1️⃣ Clone the Repository
-- git clone https://github.com/yourusername/pdf-to-xml-converter.git
+- git clone https://github.com/SHAKSHIY/pdf-to-xml-converter.git
 - cd pdf-to-xml-converter
 
 2️⃣ Install Dependencies
