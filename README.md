@@ -1,10 +1,10 @@
-﻿## PDF-to-XML Converter
+﻿# PDF-to-XML Converter
 
-# Overview
+## Overview
 
 This project is a web-based application that allows users to upload PDF files and convert them into structured XML format while preserving the document's structure and content.
 
-# Features
+## Features
 
 User authentication (login/register functionality)
 
@@ -18,7 +18,7 @@ Option to copy or download the XML file
 
 Responsive UI built with React
 
-# Tech Stack
+## Tech Stack
 
 Frontend: React, Axios, Tailwind CSS
 
@@ -28,7 +28,7 @@ Database: MongoDB (Mongoose ORM)
 
 Authentication: JSON Web Token (JWT)
 
-# Installation & Setup
+## Installation & Setup
 
 Prerequisites
 
@@ -36,7 +36,7 @@ Node.js and npm installed
 
 MongoDB running locally or through a cloud provider (MongoDB Atlas)
 
-# Backend Setup
+## Backend Setup
 
 Navigate to the backend directory:
 
@@ -56,7 +56,7 @@ Start the backend server:
 
 npm start
 
-# Frontend Setup
+## Frontend Setup
 
 Navigate to the frontend directory:
 
@@ -70,7 +70,7 @@ Start the frontend server:
 
 npm start
 
-# Usage
+## Usage
 
 Sign up or log in to the application.
 
@@ -82,15 +82,15 @@ View the XML output, copy it, or download it as a file.
 
 Access past conversions from the history section.
 
-## API Endpoints
+# API Endpoints
 
-# Authentication
+## Authentication
 
 POST /api/auth/register - Register a new user
 
 POST /api/auth/login - Authenticate and receive a JWT token
 
-# File Upload & Conversion
+## File Upload & Conversion
 
 POST /api/upload - Upload a PDF and convert it to XML
 
