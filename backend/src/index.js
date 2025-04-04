@@ -101,24 +101,62 @@ app.post("/api/convert", authenticateJWT, async (req, res) => {
     const data = await pdfParse(req.files.pdf.data);
     broadcastStatus({ progress: 40, message: "PDF text extracted" });
 
-    // Advanced parsing: split into pages and paragraphs
+    // Split the PDF text into pages by form feed
     const pages = data.text.split("\f");
     const documentXml = xmlbuilder.create("document");
+
     pages.forEach((pageText, pIndex) => {
       const pageElement = documentXml.ele("page", { number: pIndex + 1 });
+      // Split page text into paragraphs using double newlines
       const paragraphs = pageText.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+      
       paragraphs.forEach((para) => {
-        pageElement.ele("paragraph").dat(para.trim());
+        // Check if paragraph contains the table marker
+        if (para.includes("Component Mass fraction")) {
+          // Define marker string
+          const marker = "Component Mass fraction";
+          // Split the paragraph into narrative and table parts
+          const parts = para.split(marker);
+          // If there's narrative text before the marker, add it as a paragraph
+          if (parts[0].trim() !== "") {
+            pageElement.ele("paragraph").dat(parts[0].trim());
+          }
+          // Now process the table part
+          const tableElement = pageElement.ele("table");
+          // Use the marker itself as the header
+          const headerElement = tableElement.ele("header");
+          headerElement.ele("cell").dat(marker);
+          // Process the rest of the text after the marker
+          const tableRowsText = parts[1].trim();
+          if (tableRowsText) {
+            // Split table rows by newline and filter out empty lines
+            const rows = tableRowsText.split("\n").filter(line => line.trim().length > 0);
+            rows.forEach((line) => {
+              // Split each row by two or more spaces to separate columns
+              const cells = line.split(/\s{2,}/).filter(cell => cell.trim().length > 0);
+              if (cells.length > 0) {
+                const rowElement = tableElement.ele("row");
+                cells.forEach(cell => {
+                  rowElement.ele("cell").dat(cell.trim());
+                });
+              }
+            });
+          }
+        } else {
+          // Regular paragraph processing
+          pageElement.ele("paragraph").dat(para.trim());
+        }
       });
     });
+
     const xmlOutput = documentXml.end({ pretty: true });
     broadcastStatus({ progress: 90, message: "XML conversion completed" });
 
-    // Save conversion history with timestamp and PDF name
+    // Save conversion history with original text and PDF name
     const conversion = new Conversion({
       xmlResult: xmlOutput,
       originalText: data.text,
-      pdfName: req.files.pdf.name, // NEW: store the original file name
+      pdfName: req.files.pdf.name,
       user: req.user.userId,
       timestamp: new Date()
     });
@@ -131,6 +169,8 @@ app.post("/api/convert", authenticateJWT, async (req, res) => {
     res.status(500).json({ error: "PDF conversion failed", details: error.message });
   }
 });
+
+
 
 // Advanced filtering/search in conversion history
 app.get("/api/history", authenticateJWT, async (req, res) => {

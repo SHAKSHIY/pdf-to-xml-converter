@@ -1,7 +1,7 @@
-// src/components/Register.js
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
+import './Auth.css';
 
 function Register() {
   const [email, setEmail] = useState('');
@@ -21,30 +21,32 @@ function Register() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '0 auto', padding: '1rem' }}>
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ width: '100%', marginBottom: '0.5rem' }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ width: '100%', marginBottom: '0.5rem' }}
-        />
-        <button type="submit" style={{ width: '100%' }}>Register</button>
-      </form>
-      <p>
-        Already have an account? <Link to="/">Login Here</Link>
-      </p>
+    <div className="auth-container">
+      <div className="auth-box">
+        <h2 className="auth-title">Register</h2>
+        <form onSubmit={handleRegister} className="auth-form">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="auth-input"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="auth-input"
+          />
+          <button type="submit" className="auth-button">Register</button>
+        </form>
+        <p className="auth-link">
+          Already have an account? <Link to="/">Login Here</Link>
+        </p>
+      </div>
     </div>
   );
 }

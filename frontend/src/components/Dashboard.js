@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react"; 
 import axios from "axios";
 import "./Dashboard.css";
 
@@ -6,7 +6,9 @@ function Dashboard() {
   const [file, setFile] = useState(null);
   const [xml, setXml] = useState("");
   const [originalText, setOriginalText] = useState("");
-  const [activeView, setActiveView] = useState("xml");
+  const [xmlPages, setXmlPages] = useState([]); // array of page strings
+  const [currentPage, setCurrentPage] = useState(0);
+  const [activeView, setActiveView] = useState("xml"); // "xml" or "original"
   const [conversionHistory, setConversionHistory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [profile, setProfile] = useState(null);
@@ -14,7 +16,26 @@ function Dashboard() {
   const ws = useRef(null);
   const token = localStorage.getItem("token");
 
-  // Wrap fetchProfile in useCallback so it remains stable
+  // Parse XML string and extract pages using DOMParser
+  const parseXmlPages = (xmlString) => {
+    if (!xmlString) return [];
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    const pageElements = xmlDoc.getElementsByTagName("page");
+    const pages = [];
+    for (let i = 0; i < pageElements.length; i++) {
+      // Get inner XML (or text) of the page element
+      pages.push(pageElements[i].innerHTML.trim());
+    }
+    return pages;
+  };
+
+  // Update xmlPages whenever xml state changes
+  useEffect(() => {
+    setXmlPages(parseXmlPages(xml));
+    setCurrentPage(0); // reset to first page when new xml arrives
+  }, [xml]);
+
   const fetchProfile = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/profile", {
@@ -26,7 +47,6 @@ function Dashboard() {
     }
   }, [token]);
 
-  // Wrap fetchHistory in useCallback so it remains stable
   const fetchHistory = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/history", {
@@ -39,11 +59,9 @@ function Dashboard() {
     }
   }, [token, searchTerm]);
 
-  // useEffect now includes fetchProfile and fetchHistory in its dependency array
   useEffect(() => {
     fetchProfile();
     fetchHistory();
-    // Set up WebSocket connection for real-time status updates
     ws.current = new WebSocket("ws://localhost:5000");
     ws.current.onmessage = (event) => {
       const status = JSON.parse(event.data);
@@ -85,6 +103,36 @@ function Dashboard() {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     fetchHistory();
+  };
+
+  const copyXMLToClipboard = () => {
+    if (xml) {
+      navigator.clipboard.writeText(xml);
+      alert("Full XML copied to clipboard!");
+    }
+  };
+
+  const downloadXML = () => {
+    const element = document.createElement("a");
+    const fileBlob = new Blob([xml], { type: "text/xml" });
+    element.href = URL.createObjectURL(fileBlob);
+    element.download = "converted.xml";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
+  // Functions for multi-page navigation in XML viewer
+  const nextPage = () => {
+    if (currentPage < xmlPages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   return (
@@ -142,7 +190,32 @@ function Dashboard() {
           </div>
           <div className="content">
             {activeView === "xml" ? (
-              <pre>{xml}</pre>
+              <>
+                {xmlPages.length > 0 ? (
+                  <div className="multi-page-viewer">
+                    <div className="navigation">
+                      <button onClick={prevPage} disabled={currentPage === 0}>
+                        Previous
+                      </button>
+                      <span>
+                        Page {currentPage + 1} of {xmlPages.length}
+                      </span>
+                      <button onClick={nextPage} disabled={currentPage === xmlPages.length - 1}>
+                        Next
+                      </button>
+                    </div>
+                    <pre>{xmlPages[currentPage]}</pre>
+                  </div>
+                ) : (
+                  <pre>{xml}</pre>
+                )}
+                {xml && (
+                  <div className="xml-actions">
+                    <button onClick={copyXMLToClipboard}>Copy Full XML</button>
+                    <button onClick={downloadXML}>Download Full XML</button>
+                  </div>
+                )}
+              </>
             ) : (
               <pre>{originalText}</pre>
             )}
