@@ -71,24 +71,52 @@ Start Frontend
 5️⃣ Access the Application
 - Go to http://localhost:3000 in your browser.
 
-## Challenge Level I Implemented?
-This project has been developed up to Level 3 (Advanced Implementation), which includes:
+## Challenge Level Implemented?
+This project successfully implements all the Level 1 and Level 2 requirements, along with selected features from Level 3. Below is a summary of what’s covered:
 
-- Advanced PDF parsing to retain tables, lists, paragraphs, and headers
+✅ Level 1 (Basic)
 
-- Multi-page support for handling structured documents
+✔️ Email/password-based login and registration
 
-- XML output that mirrors PDF structure and formatting
+✔️ PDF upload functionality
 
-- Interactive multi-page viewer for both PDF and XML
+✔️ Basic PDF-to-XML conversion (text extraction)
 
-- Real-time conversion status updates with WebSockets
+✔️ On-screen XML display
 
-- Advanced search & filtering in conversion history
+✔️ Copy and download XML options
 
-- Comprehensive error handling and edge-case management
+✔️ Conversion history stored in MongoDB
 
-- Fully responsive design optimized for both desktop and mobile
+✔️ List view for past conversions
+
+✅ Level 2 (Intermediate)
+
+✔️ JWT-based authentication and protected routes
+
+✔️ Improved conversion: maintains paragraphs and headers
+
+✔️ Multi-page display of PDFs and XML
+
+✔️ Sidebar navigation for conversion history
+
+✔️ Dual-pane preview: Original PDF and converted XML
+
+✔️ Basic error handling and email/password validation
+
+✔️ User profile management and dashboard
+
+🔹 Level 3 (Partial)
+
+✅ Real-time conversion progress with WebSocket
+
+✅ Responsive design for desktop and mobile
+
+✅ Interactive viewer for PDF and XML
+
+✅ Basic XML formatting for structure mirroring
+
+This positions the project solidly at Level 2, with progress toward Level 3.
 
 ## Usage
 - Sign up or log in to the application.
