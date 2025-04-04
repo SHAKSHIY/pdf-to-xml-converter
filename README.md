@@ -106,15 +106,15 @@ This project successfully implements all the Level 1 and Level 2 requirements, a
 
 ✔️ User profile management and dashboard
 
-🔹 Level 3 (Partial)
+✅ Level 3 (Partial)
 
-✅ Real-time conversion progress with WebSocket
+✔️ Real-time conversion progress with WebSocket
 
-✅ Responsive design for desktop and mobile
+✔️ Responsive design for desktop and mobile
 
-✅ Interactive viewer for PDF and XML
+✔️ Interactive viewer for PDF and XML
 
-✅ Basic XML formatting for structure mirroring
+✔️ Basic XML formatting for structure mirroring
 
 This positions the project solidly at Level 2, with progress toward Level 3.
 
